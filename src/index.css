@@ -38,13 +38,11 @@
 
 body {
     font-family: "Raleway", sans-serif;
-    font-optical-sizing: auto;
+    /* font-optical-sizing: auto; */
     background: var(--color-bg);
     font-size: 0.9rem;
     line-height: 1.6;
     color: var(--color-gray-700)
-    /* font-weight: <weight>;
-    font-style: normal; */
   }
 
 a {
@@ -52,6 +50,7 @@ a {
     text-decoration: none;
 }
 
+/* no bullets */
 ul {
     list-style: none;
 }
@@ -100,6 +99,7 @@ section {
 .btn {
     display: inline-block;
     width:fit-content;
+    /* series means hight first then width */
     padding: 0.5rem 1rem;
     border-radius: var(--radius-2);
     background: var(--color-white);
@@ -122,8 +122,9 @@ section {
 
 .btn.sm {
     font-size: 0.8rem;
-    padding: 03rem 0.7rem;
+    padding: 0.3rem 0.7rem;
     font-weight: 400;
+    margin: 0.5rem;
 }
 
 .btn.danger {
@@ -241,6 +242,8 @@ nav {
     overflow: hidden;
 }
 
+
+
 /*=================Footer==================*/
 footer {
     background: var(--color-gray-900);
@@ -275,4 +278,35 @@ footer {
     padding: 1rem;
     color: var(--color-white);
     font-weight: 300;
+}
+
+/*=================Post Detail==================*/
+.post-detail {
+    width: var(--form-width);
+    background: var(--color-white);
+    margin-inline: auto;
+    padding: 2rem 0;
+}
+
+.post-detail__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom:  1.5rem;
+}
+
+.post-detail__buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.post-detail__thumbnail {
+    margin: 1rem 0;
+    height: fit-content;
+    max-height: 30rem;
+    overflow: hidden;
+}
+
+.post-detail p {
+    margin-bottom: 0.7rem;
 }
