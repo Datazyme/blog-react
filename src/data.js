@@ -16,7 +16,7 @@ export const DUMMY__POSTS = [
         id: '2',
         thumbnail: Thumbnail2,
         category: 'science',
-        title: 'Cyborg raises hand to because it knows the ansers second post',
+        title: 'Cyborg raises hand because it knows the ansers second post',
         description: 'Cyborg is not the same thing as bionics, biorobotics, or androids; it applies to an organism that has restored function or, especially, enhanced abilities due to the integration of some artificial component or technology that relies on some sort of feedback, for example: prostheses, artificial organs, implants or, in some cases, wearable technology.[3] Cyborg technologies may enable or support collective intelligence.[4] A related, possibly broader, term is the "augmented human".[3][5][6] While cyborgs are commonly thought of as mammals, including humans, they might also conceivably be any kind of organism.',
         authorID: 2
     },
