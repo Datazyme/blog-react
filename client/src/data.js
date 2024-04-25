@@ -23,7 +23,7 @@ export const DUMMY__POSTS = [
     {
         id: '3',
         thumbnail: Thumbnail3,
-        category: 'entertainmnet',
+        category: 'entertainment',
         title: 'Chamelions and their dreamcoats 3rd post',
         description: 'Chameleons or chamaeleons (family Chamaeleonidae) are a distinctive and highly specialized clade of Old World lizards with 200 species described as of June 2015.[1] The members of this family are best known for their distinct range of colours, being capable of colour-shifting camouflage. The large number of species in the family exhibit considerable variability in their capacity to change colour. For some, it is more of a shift of brightness (shades of brown); for others, a plethora of colour-combinations (reds, yellows, greens, blues) can be seen.',
         authorID: 3
