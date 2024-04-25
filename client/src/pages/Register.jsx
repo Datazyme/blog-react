@@ -9,6 +9,8 @@ const Register = () => {
     passwordconfirm: ''
   })
 
+  //use name in input below because that is how each input is
+  //targeted by e.target.name
   const changeInputHandler = (e) => {
     setUserData(prevState => {
       return {...prevState, [e.target.name] : e.target.value}
