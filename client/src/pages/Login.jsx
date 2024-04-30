@@ -19,13 +19,14 @@ const Login = () => {
       <div className='container'>
         <h2>Sign In</h2>
         <form className='form login__form'>
-          <p className='form__error-message'>Error Message Register</p>
+          <p className='form__error-message'>Error Message Login</p>
           <input 
             type='text' 
             placeholder='email' 
             name='email' 
             value={userData.email} 
-            onChange={changeInputHandler}>
+            onChange={changeInputHandler}
+            autoFocus>
           </input>
           <input 
             type='password' 
