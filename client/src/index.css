@@ -354,6 +354,13 @@ input, select, textarea {
     color: var(--color-primary);
 }
 
+/* custom style for react quill. can use important to force the style if it doesn't show */
+.ql-editor {
+    overflow: scroll;
+    background: var(--color-white);
+    height: 10rem !important;
+}
+
 /*=================Authors==================*/
 .authors__container {
     display: grid;
@@ -480,4 +487,54 @@ input, select, textarea {
 .dashboard__post-actions {
     display: flex;
     gap: 1rem;
+}
+
+/*=================Media Queries==================*/
+@media screen and (max-width: 800px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .container {
+        width: var(--container-width-md);
+    }
+
+    /* Navbar */
+    .nav__container {
+        position: relative;
+    }
+
+    .nav__menu {
+        position: absolute;
+        top: 5rem;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .nav__menu li {
+        width: 100%;
+        box-shadow: -2rem 4rem 4rem rgba(0, 0, 0, 0.26);     
+    }
+
+    .nav__menu li a {
+        display: block;
+        background: var(--color-white);
+        padding: 0.85rem 2.5rem;
+    }
+
+    .nav__toggle-btn {
+        display: inline-block;
+        background: transparent;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
 }
