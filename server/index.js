@@ -2,16 +2,19 @@ const express = require('express')
 const cors = require('cors')
 const {connect} = require('mongoose')
 require('dotenv').config()
+const upload = require('express-fileupload')
 
 const userRoutes = require('./routes/userRoutes.jsx')
 const postRoutes = require('./routes/postRoutes.jsx')
 const { notFound, errorHandler } = require('./middleware/errorMiddleware.jsx')
 
 const app = express();
-app.use(express.json({extended: true}))
-app.use(express.urlencoded({extended: true}))
+app.use(express.json({extended: true}));
+app.use(express.urlencoded({extended: true}));
 //connects to local host of client folder
-app.use(cors({credentials: true, origin: "http://localhost:3000"}))
+app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(upload());
+app.use('/uploads', express.static(__dirname + '/uploads'))
 
 //routes
 app.use('/api/users', userRoutes)
