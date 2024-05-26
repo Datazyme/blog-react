@@ -3,8 +3,8 @@ const { Router } = require('express')
 //PATCH is a method of modifying resources where the client sends 
 //partial data that is to be updated without modifying the entire data.
 
-const {registerUser, loginUser, getUser, changeAvatar, editUser, getAuthors} = require("../controllers/userControllers")
-const authMiddleware = require('../middleware/authMiddleware.jsx')
+const {registerUser, loginUser, getUser, changeAvatar, editUser, getAuthors} = require("../controllers/userControllers.js")
+const authMiddleware = require('../middleware/authMiddleware.js')
 const router = Router()
 
 router.post('/register', registerUser)

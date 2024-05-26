@@ -126,7 +126,7 @@ const changeAvatar = async(req, res, next) => {
         const user = await User.findById(req.user.id)
         //delete old avatar if exists
         if(user.avatar) {
-            fs.unlink(path.join(__dirname, '..', 'uploads', user.avatar, user.avatar), (err) => {
+            fs.unlink(path.join(__dirname, '..', 'uploads', user.avatar), (err) => {
                 if(err) {
                     return next(new HttpError(err))
                 }
