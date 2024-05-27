@@ -165,8 +165,50 @@ const changeAvatar = async(req, res, next) => {
 //Edit user details
 //Post to : api/users/edit-user
 //protected
-const editUser = async(req, res, next) => {
-    res.json('Edit user details')
+const editUser = async (req, res, next) => {
+    try {
+        //brought in from UserProfile.jsx in client
+        const {name, email, password, newPassword, confirmNewPassword} = req.body
+        console.log(req.user)
+        if(!name || !email || !password || !newPassword) {
+            return next(new HttpError("Fill in all fields", 422))
+        }
+
+        //get user from database
+        const user = await User.findById(req.user.id);
+        console.log(req.user)
+        if(!user) {
+            return next(new HttpError("User not found.", 403))
+        }
+
+        //make sure email doesn't already exist
+        //updates email
+        const emailExist = await User.findOne({email});
+        //want to update details with changing email as it needs to be unique to login
+        if(emailExist && (emailExist._id != req.user.id)) {
+            return next(new HttpError("Email areldy exists.", 422));
+        }
+        //compare current password to database password
+        //can update password
+        const validateUserPassword = await bcrypt.compare(password, user.password);
+        if(!validateUserPassword) {
+            return next(new HttpError("Invalid password", 422))
+        }
+
+        //compare new password
+        if(newPassword !== confirmNewPassword) {
+            return next(new HttpError("Passwords do not match.", 422))
+        }
+
+        //hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(newPassword, salt);
+        const updateUser = await User.findByIdAndUpdate(req.user.id, {name, email, password: hashedPass}, {new: true});
+        res.status(200).json(updateUser);
+
+    } catch (error) {
+        return next(new HttpError(error))
+    }
 }
 
 //Get users/authors
