@@ -169,14 +169,12 @@ const editUser = async (req, res, next) => {
     try {
         //brought in from UserProfile.jsx in client
         const {name, email, password, newPassword, confirmNewPassword} = req.body
-        console.log(req.user)
         if(!name || !email || !password || !newPassword) {
             return next(new HttpError("Fill in all fields", 422))
         }
 
         //get user from database
         const user = await User.findById(req.user.id);
-        console.log(req.user)
         if(!user) {
             return next(new HttpError("User not found.", 403))
         }
