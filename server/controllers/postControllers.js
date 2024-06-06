@@ -4,6 +4,7 @@ const HttpError = require("../models/errorModel")
 const fs = require('fs')
 const path = require('path')
 const {v4: uuid} = require('uuid')
+const httpError = require('../models/errorModel')
 
 
 
@@ -13,8 +14,8 @@ Protected*/
 const createPost = async (req, res, next) => {
     //res.json("Create Posts")
     try {
-        let {title, body, category} = req.body;
-        if(!title || !body || !category || !req.files) {
+        let {title, description, category} = req.body;
+        if(!title || !description || !category || !req.files) {
             return next(new HttpError('Fill in all fields, choose a thumbnail', 422))
         }
 
@@ -38,7 +39,7 @@ const createPost = async (req, res, next) => {
             }  else {
                 //req.user.id comes from authmiddleware
                 const newPost = await Post.create({
-                    title, category, body, thumbnail: newFilename, creator: req.user.id});
+                    title, category, description, thumbnail: newFilename, creator: req.user.id});
                 if(!newPost) {
                     return next(new HttpError('Post could not be changed', 422))
                 }
@@ -61,35 +62,119 @@ const createPost = async (req, res, next) => {
 GET: api/posts
 Unprotected*/
 const getPosts = async (req, res, next) => {
-    res.json("Get Posts")
+    try {
+        const posts = await Post.find().sort({updatedAt: -1});
+        if(!posts) {
+            return next(new HttpError('Post not found.', 404));
+        }
+        res.status(200).json(posts)
+    } catch {
+        return next(new HttpError(error))
+    }
 }
 
 /*============= Get Single Post ===============
 GET: api/posts/:id
 Unprotected*/
 const getPost = async (req, res, next) => {
-    res.json("Get Single Post")
+    try {
+        //const id = req.params.id" (or "const {id} = req.params" is the same)
+        const postID = req.params.id
+        const post = await Post.findById(postID);
+        if(!post) {
+            return next(new HttpError('Post not found.', 404));
+        }
+        res.status(200).json(post)
+    } catch (error) {
+        return next(new HttpError('No post found', 404))
+    }
+    
+
 }
 
 /**============= Get Posts By Category ===============
 GET: api/posts/categories/:category
 Unprotected*/
 const getCatPosts = async (req, res, next) => {
-    res.json("Get Posts By Category")
+    try {
+        const {category} = req.params;       
+        const catPosts = await Post.find({category}).sort({createdAt: -1});
+        if(!catPosts) {
+            return next(new HttpError('No posts found.', 404));
+        }
+        res.status(200).json(catPosts)
+    } catch (error) {
+        return next(new HttpError(error))
+    }
 }
 
 /**============= Get Authors/Users Posts===============
 GET: api/posts/users/:id
 Unprotected*/
 const getUserPosts = async (req, res, next) => {
-    res.json("Get Authors Posts")
+    try {
+        const {id} = req.params;
+        const userPosts = await Post.find({creator: id}).sort({createdAt: -1});
+        res.status(200).json(userPosts)
+    } catch (error) {
+        return next(new HttpError(error))
+    }
 }
 
 /**============= Edit Post ===============
 Patch: api/posts/:id
 Protected*/
 const editPost = async (req, res, next) => {
-    res.json("Edit Post")
+    try {
+        let fileName;
+        let newFilename;
+        const postId = req.params.id;
+        let {title, category, description} = req.body;
+
+        //ReactQuill has a paragraph opening and closing tag with a break tag in between
+        //so there are 11 characters already taken
+        if(!title || !category || description.length < 12) {
+            return next(new httpError("Fill in all field", 422))
+        }
+        //update post without updating thumbnail
+        if(!req.files) {
+            updatedPost = await Post.findByIdAndUpdate
+            (postId, {title, category, description}, {new: true});
+        } else {
+            //for updating thumbnail get old post from database
+            const oldPost = await Post.findById(postId);
+            //delete old thumbnail from upload
+            fs.unlink(path.join(__dirname, '..', 'uploads', oldPost.thumbnail), async (err) => {
+                if(err) {
+                    return next(new HttpError(err))
+                }            
+            })
+            //upload new thumbnail
+            const {thumbnail} = req.files;
+            //check file size 
+            if(thumbnail.size > 2000000) {
+                return next(new HttpError('Thumbnail too big. Should be less than 2mb'))
+            }
+            fileName = thumbnail.name;
+            let splitFilename = fileName.split('.');
+            newFilename = splitFilename[0] + uuid() + '.' + splitFilename[splitFilename.length - 1];
+            thumbnail.mv(path.join(__dirname, '..', 'uploads', newFilename), async (err) => {
+                if(err) {
+                    return next(new HttpError(err))
+                }
+            })
+            updatedPost = await Post.findByIdAndUpdate
+            (postId, {title, category, description, thumbnail: newFilename}, {new: true});
+        }
+
+        if(!updatedPost) {
+            return next(new HttpError("Could nto update post", 400))
+        }
+        
+        res.status(200).json(updatedPost)
+    } catch (error) {
+        return next(new HttpError(error))
+    }
 }
 
 /**============= Delete Post ===============
