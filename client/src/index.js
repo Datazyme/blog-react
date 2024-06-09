@@ -18,6 +18,7 @@ import CategoryPosts from'./pages/CategoryPosts';
 import AuthorPosts from'./pages/AuthorPosts';
 import Dashboard from'./pages/Dashboard';
 import Logout from'./pages/Logout';
+import UserProvider from './context/userContext';
 
 
 //createBrowserRouter coming from react-dom
@@ -25,7 +26,7 @@ import Logout from'./pages/Logout';
 const router = createBrowserRouter([
   {
     path:"/",
-    element: <Layout></Layout>,
+    element: <UserProvider><Layout /></UserProvider>,
     errorElement: <ErrorPage></ErrorPage>,
     //children are the files in pages folder with each file having its own path
     //have to import each file and give each one a path name. All of these are then

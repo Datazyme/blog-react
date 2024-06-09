@@ -24,7 +24,7 @@ const Register = () => {
   }
 
   const registerUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setError('')
     try {
       //axios.post because registerUser is post route in userRoutes.js
