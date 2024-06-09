@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { UserContext } from '../context/userContext'
+import { useNavigate } from 'react-router-dom'
 
 const EditPost = () => {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('Uncategorized')
   const [description, setDescription] = useState('')
   const [thumbnail, setThumbnail] = useState('')
+  
+  const navigate = useNavigate();
+  const {currentUser} = useContext(UserContext);
+  const token = currentUser?.token;
 
-  const postCategories = ['Agriculture', 'Business', 'Education', 'Entertainment', 'Art', 'Investment', 'Uncategorized', 'Weather']
+  //redirect not logged in users to login page
+  useEffect (() => {
+    if(!token) {
+      navigate('/login')
+    }
+  }, []);
   
   //this is for ReactQuill which makes a dialog box that gives typing style options below in toolbar above textarea
   const modules = {
@@ -26,7 +37,9 @@ const EditPost = () => {
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent', 'link', 'image'
-  ]
+  ];
+
+  const postCategories = ['Agriculture', 'Business', 'Education', 'Entertainment', 'Art', 'Investment', 'Uncategorized', 'Weather']
 
   return (
     <section className='create-post'>
