@@ -1,16 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Avatar from '../images/avatar1.jpg'
+import axios from 'axios'
 
-const PostAuthor = () => {
+const PostAuthor = ({creator, createdAt}) => {
+  const [author, setAuthor] = useState({})
+
+  useEffect(() =>{
+    const getAuthor  = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users/${creator}`);
+        setAuthor(response?.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getAuthor();
+  }, []);
+
   return (
-    <Link to={`/posts/users/nonsense`} className='post__author'>
+    <Link to={`/posts/users/${creator}`} className='post__author'>
         <div className='post__author-avatar'>
-            <img src={Avatar} alt=""></img>
+            <img src={`${process.env.REACT_APP_ASSETS_URL}/uploads/${author?.avatar}`} alt=""></img>
         </div>
         <div className='post__author-details'>
-            <h5>By: Ernest Achiever</h5>
-            <small>Just Now</small>
+            <h5>By: {author?.name}</h5>
+            <small>{createdAt}</small>
         </div>
     </Link>
   )
