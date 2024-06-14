@@ -1,47 +1,60 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PostAuthor from '../components/PostAuthor'
-import { Link } from 'react-router-dom'
-import thumbnail1 from '../images/blog1.jpg'
+import { Link, useParams } from 'react-router-dom'
+
+import axios from 'axios'
+
+import Loader from '../components/Loader'
+import DeletePost from './DeletePost'
+import { UserContext } from '../context/userContext'
+
 
 const PostDetail = () => {
+  //useparams here can use id bc it is specified in router.get('/:id', getPost) in postRoutes
+  //and in path: "posts/:id", element: <PostDetail></PostDetail> in index.js in client
+  const {id} = useParams()
+  const [post, setPost] = useState(null)
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const {currentUser} = useContext(UserContext);
+
+  useEffect(() => {
+    const getPost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts/${id}`);
+        setPost(response.data)
+      } catch (err) {
+        console.log(err)
+      }
+      setIsLoading(false)
+    }
+    getPost();
+  }, []);
+
+  if(isLoading) {
+    return <Loader />
+  };
+
   return (
     <section className='post_detail'>
-      <div className='container post-detail__container'>
+      {error && <p className='error'>{error}</p>}
+      {post && <div className='container post-detail__container'>
         <div className='post-detail__header'>
-          <PostAuthor />
-          <div className='post_detail__buttons'>
+          <PostAuthor creator={post.creator} createdAt={post.createdAt}/>
+          {currentUser?.id == post?.creator && <div className='post_detail__buttons'>
             <Link to={'.posts/werwer/edit'} className='btn sm primary'>Edit</Link>
-            <Link to={'.posts/werwer/delete'} className='btn sm danger'>Delete</Link>
-          </div>
+            <DeletePost postId={id}></DeletePost>
+          </div>}
+ 
         </div>
-        <h1>This is the post title!</h1>
+        <h1>{post.title}</h1>
         <div className='post-detail__thumbnail'>
-          <img src={thumbnail1} alt="" ></img>
+          <img src={`${process.env.REACT_APP_ASSETS_URL}/uploads/${post.thumbnail}`} alt="" ></img>
         </div>
-        <p>Monkey is a common name that may refer to most mammals of the infraorder 
-          Simiiformes, also known as the simians. Traditionally, all animals in the group
-          now known as simians are counted as monkeys except the apes. 
-          Thus monkeys, in that sense, constitute an incomplete paraphyletic grouping; 
-          however, in the broader sense based on cladistics, apes (Hominoidea) are also 
-          included, making the terms monkeys and simians synonyms in regard to their scope.
-        </p>
-        <p>
-          Monkey is a common name that may refer to most mammals of the infraorder 
-          Simiiformes, also known as the simians. Traditionally, all animals in the group
-          now known as simians are counted as monkeys except the apes. 
-          Thus monkeys, in that sense, constitute an incomplete paraphyletic grouping; 
-          however, in the broader sense based on cladistics, apes (Hominoidea) are also 
-          included, making the terms monkeys and simians synonyms in regard to their scope.
-        </p>
-        <p>
-          Monkey is a common name that may refer to most mammals of the infraorder 
-          Simiiformes, also known as the simians. Traditionally, all animals in the group
-          now known as simians are counted as monkeys except the apes. 
-          Thus monkeys, in that sense, constitute an incomplete paraphyletic grouping; 
-          however, in the broader sense based on cladistics, apes (Hominoidea) are also 
-          included, making the terms monkeys and simians synonyms in regard to their scope.
-        </p>
-      </div>
+        <p dangerouslySetInnerHTML={{__html: post.description}}></p>
+      </div>}
     </section>
   )
 }
