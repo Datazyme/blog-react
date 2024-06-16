@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PostAuthor from '../components/PostAuthor'
 import { Link, useParams } from 'react-router-dom'
-
+import DOMPurify from "dompurify";
 import axios from 'axios'
 
 import Loader from '../components/Loader'
@@ -17,6 +17,7 @@ const PostDetail = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  const sanitizer = DOMPurify.sanitize;
   const {currentUser} = useContext(UserContext);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const PostDetail = () => {
         <div className='post-detail__header'>
           <PostAuthor creator={post.creator} createdAt={post.createdAt}/>
           {currentUser?.id == post?.creator && <div className='post_detail__buttons'>
-            <Link to={'.posts/werwer/edit'} className='btn sm primary'>Edit</Link>
+            <Link to={`/posts/${post?._id}/edit`} className='btn sm primary'>Edit</Link>
             <DeletePost postId={id}></DeletePost>
           </div>}
  
@@ -53,7 +54,7 @@ const PostDetail = () => {
         <div className='post-detail__thumbnail'>
           <img src={`${process.env.REACT_APP_ASSETS_URL}/uploads/${post.thumbnail}`} alt="" ></img>
         </div>
-        <p dangerouslySetInnerHTML={{__html: post.description}}></p>
+        <p dangerouslySetInnerHTML={{__html: sanitizer(post.description)}}></p>
       </div>}
     </section>
   )

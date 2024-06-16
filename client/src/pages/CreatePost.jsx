@@ -3,12 +3,14 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { UserContext } from '../context/userContext'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const CreatePost = () => {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('Uncategorized')
   const [description, setDescription] = useState('')
   const [thumbnail, setThumbnail] = useState('')
+  const [error, setError] = useState('')
 
   const navigate = useNavigate();
 
@@ -42,14 +44,33 @@ const CreatePost = () => {
     'list', 'bullet', 'indent', 'link', 'image'
   ]
 
+  const createPost = async (e) => {
+    e.preventDefault();
+
+    const postData = new FormData();
+    postData.set('title', title)
+    postData.set('category', category)
+    postData.set('description', description)
+    postData.set('thumbnail', thumbnail)
+    
+    try {
+      //from index.js server which has /posts route that leads to postRoutes.js
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/posts`, postData, 
+      {withCredentials: true, headers: {Authorization: `Bearer ${token}`}});
+      if(response.status == 201) {
+        return navigate('/')
+      }
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  }
+
   return (
     <section className='create-post'>
       <div className='container'>
         <h2>Create Post</h2>
-        <p className='form__error-message'>
-          This is an error message create post
-        </p>
-        <form className='form create-post__form'>
+        {error && <p className='form__error-message'>{error}</p>}
+        <form className='form create-post__form' onSubmit={createPost}>
           <input 
             type='text' 
             placeholder='Title' 
@@ -69,7 +90,7 @@ const CreatePost = () => {
               onChange={setDescription}>
               </ReactQuill>
             <input type='file' onChange={e => setThumbnail(e.target.files[0])} accept='png, jpg, jpeg'></input>
-            <button type='submit' className='btn primary'>Update</button>
+            <button type='submit' className='btn primary'>Create</button>
           
         </form>
       </div>

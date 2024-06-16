@@ -14,6 +14,7 @@ const Posts = () => {
       const fetchPosts = async () => {
         setIsLoading(true);
         try {
+          //from index.js server which has /posts route that leads to postRoutes.js
           const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts`);
           setPosts(response?.data)
 
@@ -39,7 +40,6 @@ const Posts = () => {
             description={description} creator={creator} createdAt={createdAt}></PostItem>)
         }
         </div> : <h2 className='center'>No posts found</h2>}
-
     </section>
   )
 }
