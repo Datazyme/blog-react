@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { UserContext } from '../context/userContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const EditPost = () => {
   const [title, setTitle] = useState('')
