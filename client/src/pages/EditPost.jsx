@@ -3,14 +3,17 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { UserContext } from '../context/userContext'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const EditPost = () => {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('Uncategorized')
   const [description, setDescription] = useState('')
   const [thumbnail, setThumbnail] = useState('')
+  const [error, setError] = useState('')
   
   const navigate = useNavigate();
+  const {id} = useParams();
   const {currentUser} = useContext(UserContext);
   const token = currentUser?.token;
 
@@ -41,14 +44,55 @@ const EditPost = () => {
 
   const postCategories = ['Agriculture', 'Business', 'Education', 'Entertainment', 'Art', 'Investment', 'Uncategorized', 'Weather']
 
+  useEffect(() => {
+    const getPost = async () => {
+      //setIsLoading(true);
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts/${id}`);
+        setTitle(response.data.title)
+        //setCategory(response.data.category)
+        setDescription(response.data.description)        
+        //setThumbnail(response.data.thumbnail)
+      } catch (err) {
+        setError(err);
+      }
+      //setIsLoading(false)
+    }
+    getPost();
+  }, []);
+
+  // if(isLoading) {
+  //   return <Loader />
+  // };
+  
+  const editPost = async (e) => {
+    e.preventDefault();
+
+
+    const postData = new FormData();
+    postData.set('title', title)
+    postData.set('category', category)
+    postData.set('description', description)
+    postData.set('thumbnail', thumbnail)
+    
+    try {
+      //from index.js server which has /posts route that leads to postRoutes.js
+      const response = await axios.patch(`${process.env.REACT_APP_BASE_URL}/posts/${id}`, postData, 
+      {withCredentials: true, headers: {Authorization: `Bearer ${token}`}});
+      if(response.status == 200) {
+        return navigate('/')
+      }
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  }
+
   return (
     <section className='create-post'>
       <div className='container'>
         <h2>Edit Post</h2>
-        <p className='form__error-message'>
-          This is an error message create post
-        </p>
-        <form className='form create-post__form'>
+        {error && <p className='form__error-message'>{error}</p>}
+        <form className='form create-post__form' onSubmit={editPost}>
           <input 
             type='text' 
             placeholder='Title' 
@@ -68,7 +112,7 @@ const EditPost = () => {
               onChange={setDescription}>
               </ReactQuill>
             <input type='file' onChange={e => setThumbnail(e.target.files[0])} accept='png, jpg, jpeg'></input>
-            <button type='submit' className='btn primary'>Create</button>
+            <button type='submit' className='btn primary'>Update</button>
           
         </form>
       </div>
