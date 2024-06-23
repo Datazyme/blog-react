@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json({extended: true}));
 app.use(express.urlencoded({extended: true}));
 //connects to local host of client folder
-app.use(cors({credentials: true, origin: "blog-react-three-nu.vercel.app"}));
+app.use(cors({credentials: true, origin: "https://blog-react-three-nu.vercel.app"}));
 app.use(upload());
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
