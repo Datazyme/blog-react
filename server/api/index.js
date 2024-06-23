@@ -4,8 +4,8 @@ const {connect} = require('mongoose')
 require('dotenv').config()
 const upload = require('express-fileupload')
 
-const userRoutes = require('./routes/userRoutes.js')
-const postRoutes = require('./routes/postRoutes.js')
+const userRoutes = require('../routes/userRoutes.js')
+const postRoutes = require('../routes/postRoutes.js')
 const { notFound, errorHandler } = require('./middleware/errorMiddleware.js')
 
 const app = express();
