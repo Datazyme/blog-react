@@ -23,5 +23,7 @@ app.use('/api/posts', postRoutes)
 app.use(notFound);
 app.use(errorHandler);
 
-// connect(process.env.MONGO_URI).then(app.listen(process.env.PORT || 8000, () => console.log(`listening on 
-// port ${process.env.PORT}`))).catch(error => {console.log(error)})
+connect(process.env.MONGO_URI).then(app.listen(process.env.PORT || 8000, () => console.log(`listening on 
+port ${process.env.PORT}`))).catch(error => {console.log(error)})
+
+// "main": "index.js",
