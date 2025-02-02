@@ -25,7 +25,7 @@ import UserProvider from './context/userContext';
 //can use any name for const below but must call it in RouterProvider with router=with same name
 const router = createBrowserRouter([
   {
-    path:"https://blog-react-backend.vercel.app/",
+    path:"https://blog-react-three-nu.vercel.app/",
     element: <UserProvider><Layout /></UserProvider>,
     errorElement: <ErrorPage></ErrorPage>,
     //children are the files in pages folder with each file having its own path
