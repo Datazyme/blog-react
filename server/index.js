@@ -11,7 +11,7 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware.js')
 const app = express();
 app.use(express.json({extended: true}));
 app.use(express.urlencoded({extended: true}));
-//connects to local host of client folder
+//connects to local host of client folder/change origin to vercel link
 app.use(cors({credentials: true, origin: "http://localhost:3000"}));
 app.use(upload());
 app.use('/uploads', express.static(__dirname + '/uploads'))
@@ -26,4 +26,3 @@ app.use(errorHandler);
 connect(process.env.MONGO_URI).then(app.listen(process.env.PORT || 8000, () => console.log(`listening on 
 port ${process.env.PORT}`))).catch(error => {console.log(error)})
 
-// "main": "index.js",
