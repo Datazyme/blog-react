@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json({extended: true}));
 app.use(express.urlencoded({extended: true}));
 //connects to local host of client folder/change origin to vercel link
-app.use(cors({credentials: true, origin: ["http://localhost:3000", "https://blog-react-six-virid.vercel.app/"]}));
+app.use(cors({credentials: true, origin: ["http://localhost:3000", "https://blog-react-seven-iota.vercel.app"]}));
 app.use(upload());
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
