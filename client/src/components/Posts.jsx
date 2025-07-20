@@ -15,7 +15,7 @@ const Posts = () => {
         setIsLoading(true);
         try {
           //from index.js server which has /posts route that leads to postRoutes.js
-          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/posts`);
+          const response = await axios.get(`https://blog-react-server.vercel.app/API/posts`);
           setPosts(response?.data)
 
         } catch (err) {
