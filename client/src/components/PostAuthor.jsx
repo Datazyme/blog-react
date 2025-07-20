@@ -20,6 +20,9 @@ const PostAuthor = ({creator, createdAt}) => {
         setAuthor(response?.data)
       } catch (err) {
         console.log(err)
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
       }
     }
     getAuthor();
