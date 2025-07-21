@@ -3,21 +3,19 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
-import Loader from './Loader'
 
 import en from 'javascript-time-ago/locale/en.json'
 import ru from 'javascript-time-ago/locale/ru.json'
 
-// TimeAgo.addDefaultLocale(en)
+TimeAgo.addDefaultLocale(en)
 // TimeAgo.addLocale(ru)
 
 const PostAuthor = ({creator, createdAt}) => {
   const [author, setAuthor] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
+
 
   useEffect(() => {
     const getAuthor = async () => {
-      setIsLoading(true);
       try {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users/${creator}`);
         setAuthor(response?.data)
@@ -27,7 +25,6 @@ const PostAuthor = ({creator, createdAt}) => {
         // console.log(err.response.status);
         // console.log(err.response.headers);
       }
-      setIsLoading(false)
     }
     getAuthor();
   }, []);
