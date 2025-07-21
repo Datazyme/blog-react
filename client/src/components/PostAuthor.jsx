@@ -8,7 +8,7 @@ import Loader from './Loader'
 import en from 'javascript-time-ago/locale/en.json'
 import ru from 'javascript-time-ago/locale/ru.json'
 
-TimeAgo.addDefaultLocale(en)
+// TimeAgo.addDefaultLocale(en)
 // TimeAgo.addLocale(ru)
 
 const PostAuthor = ({creator, createdAt}) => {
@@ -23,18 +23,15 @@ const PostAuthor = ({creator, createdAt}) => {
         setAuthor(response?.data)
       } catch (err) {
         console.log(err)
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        // console.log(err.response.data);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
       }
       setIsLoading(false)
     }
     getAuthor();
   }, []);
 
-  if(isLoading) {
-    return <Loader />
-  }
 
   return (
     <Link to={`/posts/users/${creator}`} className='post__author'>
