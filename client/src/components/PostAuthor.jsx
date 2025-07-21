@@ -9,7 +9,7 @@ import en from 'javascript-time-ago/locale/en.json'
 import ru from 'javascript-time-ago/locale/ru.json'
 
 TimeAgo.addDefaultLocale(en)
-TimeAgo.addLocale(ru)
+// TimeAgo.addLocale(ru)
 
 const PostAuthor = ({creator, createdAt}) => {
   const [author, setAuthor] = useState({})
@@ -23,9 +23,9 @@ const PostAuthor = ({creator, createdAt}) => {
         setAuthor(response?.data)
       } catch (err) {
         console.log(err)
-        // console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
       }
       setIsLoading(false)
     }
